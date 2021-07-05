@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de itens</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel= "stylesheet" type="text/css" href="css/style.css"> 
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="js/funcoes.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="menuLateral">
+            <nav class="nav nav-pills nav-justified flex-column">
+                <a class="nav-link" href="formulario.html">Formulário</a>
+                <a class="nav-link active" href="listagem.html">Listagem</a>
+            </nav>
+        </div>
+        <div class="listagemArea">
+            <a href="formulario.html"><button id="btnAdicionar" class="btn btn-success">Adicionar item</button></a>
+            <table id="myTable" class="display" style="width: 100%;" >
+                <thead>
+                    <tr>
+                    <th></th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Data de fabricação</th>
+                    <th>Data de validade</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>  
+  <!-- Modal edição-->
+  <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCadastro">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Nome:</label><span class="obrigatoriedade">*</span>
+                                <input id="nome" name="nome" type="text" class="form-control">
+                                <span id="alertNome" class="alert-danger hide">O nome do item deve ser informado.</span>
+                                <span id="alertCaracteres" class="alert-danger hide">O nome não pode passar de 50 caracteres.</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Unidade de medida:<span class="obrigatoriedade">*</span></label>
+                                <select id="unidadeMedida" class="form-control" required >
+                                    <option></option>
+                                </select>
+                                <span id="alertUnidadeMedida" class="alert-danger hide">Selecione a unidade de medida.</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Quantidade:</label>
+                                <input id="quantidade" class="form-control" onchange="mascaraQuantidade(this)">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Preço:</label><span class="obrigatoriedade">*</span>
+                                <input id="preco"  class="form-control" onkeyup="mascaraReal(this)">
+                                <span id="alertPreco" class="alert-danger hide">Informe o preço do item.</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Produto perecível:</label><span class="obrigatoriedade">*</span>
+                                <div id="radioArea">
+                                </div>
+                                <span id="alertPerecivel" class="alert-danger hide">Informe se o item é perecível.</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Data de validade:</label><span class="obrigatoriedade">*</span>
+                                <input type="date" id="dataValidade" class="form-control" disabled>
+                                <span id="alertValidade" class="alert-danger hide">Informe a data de validade.</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Data de fabricação:</label><span class="obrigatoriedade">*</span>
+                                <input id="dataFabricacao" type="date" class="form-control">
+                                <span id="alertFabricacao" class="alert-danger hide">Informe a data de fabricação.</span>
+                            </div>
+                        </div>
+                    </form> 
+                </div>
+                <div id="modalFooter" class="modal-footer">
+                </div>
+            </div>
+        </div>
+  </div>
+    
+</body>
+</html>
